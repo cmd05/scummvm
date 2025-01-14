@@ -4,6 +4,7 @@ MODULE_OBJS = \
 	adlib_worx.o \
 	animation.o \
 	anm.o \
+	big5font.o \
 	console.o \
 	cursor.o \
 	cutscene.o \
@@ -12,6 +13,7 @@ MODULE_OBJS = \
 	gamefont.o \
 	img.o \
 	inventory.o \
+	langtext.o \
 	menu.o \
 	metaengine.o \
 	morph.o \

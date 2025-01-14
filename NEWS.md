@@ -1,7 +1,22 @@
 For a more comprehensive changelog of the latest experimental code, see:
         https://github.com/scummvm/scummvm/commits/
 
-#### 2.9.0 (2024-12-22)
+#### 2.10.0 (XXXX-XX-XX)
+
+ New games:
+   - Added support for Dark Seed.
+   - Added support for God of Thunder.
+
+ Nuvie:
+   - Added "Transfer a Character" feature to main menu.
+
+ SCUMM:
+   - Added support for the classic SE variants of MI1, MI2, DOTT and FT.
+   - Added support for the remastered speech and sound effects in the
+     remastered version of Day of the Tentacle.
+
+
+#### 2.9.0 "Close Encounters of the 2.9th Kind" (2024-12-22)
 
  New games:
    - Added support for Orion Burger.
@@ -304,7 +319,7 @@ For a more comprehensive changelog of the latest experimental code, see:
    - Various stability fixes.
 
 
-#### 2.8.1 (2024-03-31)
+#### 2.8.1 "Oh MMy!" (2024-03-31)
 
  General:
    - Fixed GLSL version parsing on some OpenGL ES2 platforms.

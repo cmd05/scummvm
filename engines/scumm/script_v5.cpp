@@ -1942,6 +1942,28 @@ void ScummEngine_v5::o5_pickupObject() {
 	runInventoryScript(1);
 }
 
+// Inject the speech from the SE version in the classic one, for MI1SE.
+void ScummEngine_v5::injectMISESpeech() {
+	if (_sound->shouldInjectMISEAudio()) {
+		int32 currentScript = vm.slot[_currentScript].number;
+		int32 currentScriptOffset;
+		uint16 localScriptOffset;
+
+		if (currentScript >= _numGlobalScripts) {
+			int16 localScriptNumber = currentScript - _numGlobalScripts;
+			if (localScriptNumber > 56)
+				localScriptOffset = 0;
+			else
+				localScriptOffset = _localScriptOffsets[localScriptNumber];
+		} else {
+			localScriptOffset = 8;
+		}
+
+		currentScriptOffset = vm.slot[_currentScript].offs - localScriptOffset;
+		_sound->setupMISEAudioParams(currentScript, currentScriptOffset);
+	}
+}
+
 void ScummEngine_v5::o5_print() {
 	// WORKAROUND bug #13374: The patched script for the Ultimate Talkie
 	// is missing a WaitForMessage() after Lemonhead says "Oooh, that's
@@ -1956,11 +1978,15 @@ void ScummEngine_v5::o5_print() {
 		return;
 	}
 
+	injectMISESpeech();
+
 	_actorToPrintStrFor = getVarOrDirectByte(PARAM_1);
 	decodeParseString();
 }
 
 void ScummEngine_v5::o5_printEgo() {
+	injectMISESpeech();
+
 	_actorToPrintStrFor = (byte)VAR(VAR_EGO);
 	decodeParseString();
 }

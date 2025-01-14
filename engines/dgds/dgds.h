@@ -96,6 +96,12 @@ enum DgdsKeyEvent {
 	kDgdsKeyActivate,
 };
 
+enum DgdsMouseCursor {
+	kDgdsMouseGameDefault = -1,
+	kDgdsMouseWait = -2,
+	kDgdsMouseLook = -3,
+};
+
 // TODO: Enable keymapper for dragon arcade sequences
 /*
 enum DragonArcadeKeyEvent {
@@ -164,6 +170,7 @@ private:
 
 	Common::RandomSource _random;
 	Common::Point _lastMouse; // originals start mouse at 0,0.
+	Common::EventType _lastMouseEvent; // a pending mouse event to process.
 	int _currentCursor;
 	Common::Point _currentCursorHot;
 
@@ -181,6 +188,8 @@ private:
 	uint32 _thisFrameMs;
 	int16 _lastGlobalFade; // Only used in Willy Beamish
 	uint _lastGlobalFadedPal;
+
+	bool _debugShowHotAreas;
 
 public:
 	DgdsEngine(OSystem *syst, const ADGameDescription *gameDesc);
@@ -271,6 +280,13 @@ public:
 	void enableKeymapper();
 	void disableKeymapper();
 
+	void setDebugShowHotAreas(bool enable) { _debugShowHotAreas = enable; }
+	bool getDebugShowHotAreas() const { return _debugShowHotAreas; }
+
+	static void dumpFrame(const Graphics::ManagedSurface &surf, const char *name);
+
+	void dimPalForWillyDialog(bool force);
+
 private:
 	Common::Error syncGame(Common::Serializer &s);
 
@@ -281,6 +297,7 @@ private:
 	void init(bool restarting);
 	void loadGameFiles();
 	void loadRestartFile();
+	void pumpMessages();
 };
 
 } // End of namespace Dgds

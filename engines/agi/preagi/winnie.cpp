@@ -20,6 +20,7 @@
  */
 
 #include "agi/preagi/preagi.h"
+#include "agi/preagi/picture_mickey_winnie.h"
 #include "agi/preagi/winnie.h"
 #include "agi/graphics.h"
 
@@ -212,17 +213,11 @@ void WinnieEngine::randomize() {
 void WinnieEngine::intro() {
 	drawPic(IDS_WTP_FILE_LOGO);
 	printStr(IDS_WTP_INTRO_0);
-	_system->updateScreen();
-	_system->delayMillis(0x640);
-
-	if (getPlatform() == Common::kPlatformAmiga)
-		_gfx->clearDisplay(0);
+	wait(1600);
 
 	drawPic(IDS_WTP_FILE_TITLE);
-
 	printStr(IDS_WTP_INTRO_1);
-	_system->updateScreen();
-	_system->delayMillis(0x640);
+	wait(1600);
 
 	if (!playSound(IDI_WTP_SND_POOH_0))
 		return;
@@ -1134,13 +1129,13 @@ void WinnieEngine::getMenuSel(char *szMenu, int *iSel, int fCanSel[]) {
 void WinnieEngine::gameLoop() {
 	WTP_ROOM_HDR hdr;
 	uint8 *roomdata = (uint8 *)malloc(4096);
-	int iBlock;
 	uint8 decodePhase = 0;
 
 	startTimer();
 
 	while (!shouldQuit()) {
-		if (decodePhase == 0) {
+		switch (decodePhase) {
+		case 0:
 			if (!_gameStateWinnie.nObjMiss && (_room == IDI_WTP_ROOM_PICNIC)) {
 				_room = IDI_WTP_ROOM_PARTY;
 				stopTimer();
@@ -1150,18 +1145,16 @@ void WinnieEngine::gameLoop() {
 			drawRoomPic();
 			_system->updateScreen();
 			decodePhase = 1;
-		}
-
-		if (decodePhase == 1) {
+			break;
+		case 1:
 			if (getObjInRoom(_room)) {
 				printObjStr(getObjInRoom(_room), IDI_WTP_OBJ_DESC);
 				getSelection(kSelAnyKey);
 			}
 			decodePhase = 2;
-		}
-
-		if (decodePhase == 2) {
-			for (iBlock = 0; iBlock < IDI_WTP_MAX_BLOCK; iBlock++) {
+			break;
+		case 2:
+			for (int iBlock = 0; iBlock < IDI_WTP_MAX_BLOCK; iBlock++) {
 				if (parser(hdr.ofsDesc[iBlock] - _roomOffset, iBlock, roomdata) == IDI_WTP_PAR_BACK) {
 					decodePhase = 1;
 					break;
@@ -1169,10 +1162,9 @@ void WinnieEngine::gameLoop() {
 			}
 			if (decodePhase == 2)
 				decodePhase = 3;
-		}
-
-		if (decodePhase == 3) {
-			for (iBlock = 0; iBlock < IDI_WTP_MAX_BLOCK; iBlock++) {
+			break;
+		case 3:
+			for (int iBlock = 0; iBlock < IDI_WTP_MAX_BLOCK; iBlock++) {
 				int result = parser(hdr.ofsBlock[iBlock] - _roomOffset, iBlock, roomdata);
 				if (result == IDI_WTP_PAR_GOTO) {
 					decodePhase = 0;
@@ -1187,6 +1179,9 @@ void WinnieEngine::gameLoop() {
 					break;
 				}
 			}
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -1215,8 +1210,7 @@ void WinnieEngine::drawPic(const char *szName) {
 
 	_picture->setOffset(IDI_WTP_PIC_X0, IDI_WTP_PIC_Y0);
 	_picture->decodePictureFromBuffer(buffer, size, true, IDI_WTP_PIC_WIDTH, IDI_WTP_PIC_HEIGHT);
-	_picture->setOffset(0, 0);
-	_picture->showPic(IDI_WTP_PIC_X0, IDI_WTP_PIC_Y0, IDI_WTP_PIC_WIDTH, IDI_WTP_PIC_HEIGHT);
+	_picture->showPicture(IDI_WTP_PIC_X0, IDI_WTP_PIC_Y0, IDI_WTP_PIC_WIDTH, IDI_WTP_PIC_HEIGHT);
 
 	free(buffer);
 }
@@ -1232,8 +1226,7 @@ void WinnieEngine::drawObjPic(int iObj, int x0, int y0) {
 
 	_picture->setOffset(x0, y0);
 	_picture->decodePictureFromBuffer(buffer + objhdr.ofsPic - _objOffset, objSize, false, IDI_WTP_PIC_WIDTH, IDI_WTP_PIC_HEIGHT);
-	_picture->setOffset(0, 0);
-	_picture->showPic(10, 0, IDI_WTP_PIC_WIDTH, IDI_WTP_PIC_HEIGHT);
+	_picture->showPicture(10, 0, IDI_WTP_PIC_WIDTH, IDI_WTP_PIC_HEIGHT);
 
 	free(buffer);
 }
@@ -1252,8 +1245,7 @@ void WinnieEngine::drawRoomPic() {
 	// draw room picture
 	_picture->setOffset(IDI_WTP_PIC_X0, IDI_WTP_PIC_Y0);
 	_picture->decodePictureFromBuffer(buffer + roomhdr.ofsPic - _roomOffset, 4096, true, IDI_WTP_PIC_WIDTH, IDI_WTP_PIC_HEIGHT);
-	_picture->setOffset(0, 0);
-	_picture->showPic(IDI_WTP_PIC_X0, IDI_WTP_PIC_Y0, IDI_WTP_PIC_WIDTH, IDI_WTP_PIC_HEIGHT);
+	_picture->showPicture(IDI_WTP_PIC_X0, IDI_WTP_PIC_Y0, IDI_WTP_PIC_WIDTH, IDI_WTP_PIC_HEIGHT);
 
 	// draw object picture
 	drawObjPic(iObj, IDI_WTP_PIC_X0 + roomhdr.objX, IDI_WTP_PIC_Y0 + roomhdr.objY);
@@ -1298,10 +1290,19 @@ bool WinnieEngine::playSound(ENUM_WTP_SOUND iSound) {
 	// Loop until the sound is done
 	bool skippedSound = false;
 	while (!shouldQuit() && _game.sounds[0]->isPlaying()) {
+		// process all events to keep window responsive and to
+		// allow interruption by mouse button or key press.
 		Common::Event event;
 		while (_system->getEventManager()->pollEvent(event)) {
 			switch (event.type) {
 			case Common::EVENT_KEYDOWN:
+				// don't interrupt if a modifier is pressed
+				if (event.kbd.flags & Common::KBD_NON_STICKY) {
+					continue;
+				}
+				// fall through
+			case Common::EVENT_LBUTTONUP:
+			case Common::EVENT_RBUTTONUP:
 				_sound->stopSound();
 				skippedSound = true;
 				break;
@@ -1310,6 +1311,7 @@ bool WinnieEngine::playSound(ENUM_WTP_SOUND iSound) {
 			}
 		}
 
+		_system->updateScreen();
 		_system->delayMillis(10);
 	}
 
@@ -1467,13 +1469,17 @@ void WinnieEngine::debugCurRoom() {
 }
 
 WinnieEngine::WinnieEngine(OSystem *syst, const AGIGameDescription *gameDesc) : PreAgiEngine(syst, gameDesc) {
+	_picture = nullptr;
 	setDebugger(new WinnieConsole(this));
 }
 
 WinnieEngine::~WinnieEngine() {
+	delete _picture;
 }
 
 void WinnieEngine::init() {
+	_picture = new PictureMgr_Mickey_Winnie(this, _gfx);
+
 	// Initialize sound
 
 	switch (MidiDriver::getMusicType(MidiDriver::detectDevice(MDT_PCSPK | MDT_PCJR))) {
@@ -1515,16 +1521,6 @@ void WinnieEngine::init() {
 		_isBigEndian = false;
 		_roomOffset = IDI_WTP_OFS_ROOM;
 		_objOffset = IDI_WTP_OFS_OBJ;
-		break;
-	}
-
-	switch (getPlatform()) {
-	case  Common::kPlatformApple2:
-	case  Common::kPlatformC64:
-	case  Common::kPlatformCoCo:
-		_picture->setPictureVersion(AGIPIC_C64);
-		break;
-	default:
 		break;
 	}
 

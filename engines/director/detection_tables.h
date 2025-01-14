@@ -171,7 +171,7 @@ static const PlainGameDescriptor directorGames[] = {
 	{ "fpbagarage",			"Fisher-Price Big Action Garage" },
 	{ "fpdollhouse",		"Fisher-Price Time to Play: Grand Dollhouse" },
 	{ "fpgacastle2",		"Great Adventures by Fisher-Price: Castle (1998)" },
-	{ "fpgapirates",		"Great Adventures by Fisher-Price: Pirates" },
+	{ "fpgapirates",		"Great Adventures by Fisher-Price: Pirate Ship" },	// Demo says "Pirates"
 	{ "fpgawestern",		"Great Adventures by Fisher-Price: Wild Western Town" },
 	{ "fplit",				"Fisher-Price Learning in Toyland" },
 	{ "fplpairport",		"Fisher-Price Little People: Discovery Airport" },
@@ -955,6 +955,7 @@ static const PlainGameDescriptor directorGames[] = {
 	{ "dudenmeyer",			"Duden/Meyer Multimedia sampler" },
 	{ "flaschenfahrrad",	"Das Verkehrs-Lernspiel: Fred und das Flaschenfahrrad" },
 	{ "frankiekaraoke",		"Frankie Tierwelt Karaoke" },
+	{ "funquiz",			"FunQuiz" },
 	{ "geograficus",		"Geograficus ... und Geografie wird zum Abenteuer" },
 	{ "girlspack",			"Girl's Pack!" },
 	{ "glitzerschuppen",	"Der Regenbogenfisch Die Suche Nach Den Glitzerschuppen" },
@@ -1111,6 +1112,7 @@ static const PlainGameDescriptor directorGames[] = {
 	{ "keroncuel",			"ウルトラリゾート ケロンキュール" },											// Ultra Resort Keroncuel
 	{ "kidsbox",			"Kids Box" },										// キッズボックス
 	{ "kishido",			"棋士道" },											// Art of Shogi (Go)
+	{ "krillplace",			"クリルプレイス" }, // Krill Place
 	{ "lzone",				"L-ZONE" },
 	{ "macaroni",			"マカロニほうれん荘 Interactive" },					// Romaji title in manual is Macaroni Hourensou
 	{ "magicgambo",			"Magic Gambo" },
@@ -1129,6 +1131,12 @@ static const PlainGameDescriptor directorGames[] = {
 	{ "negi1",				"ねぎ Vol. 1" }, // Negi
 	{ "negi3",				"ねぎ3世" }, // Negi the 3rd
 	{ "nemurenu",			"眠れぬ夜の小さなお話" }, // A Small Story on a Sleepless Night
+	{ "ngeangels",			"Neon Genesis Evangelion: ANGELS Strategy Game" },
+	{ "ngegenesis",			"Neon Genesis Evangelion: GENESIS Training Game" },
+	{ "ngepuzzle1",			"Neon Genesis Evangelion: Slide Puzzle" },
+	{ "ngepuzzle2",			"Neon Genesis Evangelion: Panel Puzzle" },
+	{ "ngedummy",			"Neon Genesis Evangelion: DUMMY Pong" },
+	{ "ngebomb",			"Neon Genesis Evangelion: E-BOMB Minesweeper" },
 	{ "nihonchiri",			"Visual日本地理" },									// Japan Geography
 	{ "niningashi",			"ににんがし" },
 	{ "noahsark",			"Noah's Ark" },
@@ -1287,6 +1295,13 @@ static const PlainGameDescriptor directorGames[] = {
 	{ "msseifuku",			"ミッションスクール制服図鑑" },			// Mission School Seifuku Zukan
 	{ "musicforliving",		"Music for Living Sound" },
 	{ "ngeeva00pf",			"Neon Genesis Evangelion: EVA-00 Paper Figure" },
+	{ "ngeclock",			"Neon Genesis Evangelion: EVA CLOCK" },
+	{ "ngepenpenmouse",		"Neon Genesis Evangelion: Pen-Pen" },
+	{ "ngereieyemouse",		"Neon Genesis Evangelion: Rei's Eye" },
+	{ "ngegk1",				"Neon Genesis Evangelion: Garage Kit Catalog 1" },
+	{ "ngeaiff",			"Neon Genesis Evangelion: AIFF Player" },
+	{ "ngebrowser6",		"Neon Genesis Evangelion: Collector's Disc 6 Browser" },
+	{ "ngebrowser7",		"Neon Genesis Evangelion: Collector's Disc 7 Browser" },
 	{ "no",					"NO" },
 	{ "nycalling",			"N.Y. Calling" },
 	{ "oceansbelow",		"Oceans Below" },
@@ -1367,6 +1382,7 @@ static const PlainGameDescriptor directorGames[] = {
 	{ "macbasic",			"MacBASIC: Learning BASIC on HyperCard" },
 	{ "maczaurus",			"Sharp Mac-Zaurus" },
 	{ "negishihomes",		"Negishi Homes 建築見積ｿﾌﾄ" },					// Architectural Quote Software
+	{ "ngegf",				"Evangelion Geometric Figure" },
 	{ "nsxpress",			"Honda NSX Press CD-ROM" },
 	{ "olnet",				"Open Library" },
 	{ "picturecard",		"絵カード訓練システム" },						// Picture Card Training System
@@ -4177,6 +4193,7 @@ static const DirectorGameDescription gameDescriptions[] = {
 								"YP1.DIR",   "86dca2337cbbd2612fc92bd5d0805d85", 4509574, 404),
 
 	// ©1996 Davidson & Associates, Inc.
+	// Full game is Director 5
 	MACDEMO1("fpgapirates", "Preview v1.0", "Pirates Preview (Power Mac)", "ccf864a8dc6e9d0d26eb73b4683e634b", 63276, 404),
 	WINDEMO1("fpgapirates", "Preview v1.0", "FPPSTART.EXE", "t:824388aeb958eda1a5691a1d6667a410", 792405, 404),
 
@@ -4789,6 +4806,8 @@ static const DirectorGameDescription gameDescriptions[] = {
 	WINGAME2("klondikegold", "", "KLONDIKE.EXE", "58a1d6965e1bc2a3281d1060e09f8d19", 908685,
 								 "DREDGE.DIR",   "9b20cdc5ce0dffe165a495f94bb1b450", 4916524, 404),
 
+	WINGAME1_l("krillplace", "", "KRILLWIN.EXE", "t:611ca6aa9a9c523ed24dcc6432fa63d8", 1766279, Common::JA_JPN, 404),
+
 	MACGAME1("korkydragons", "", "Dragons!",	 "r:0c7bbb4b24823e5ab871cb4c1d6f3710", 486726, 404),
 	WINGAME1("korkydragons", "", "DRAGONS!.EXE", "t:4d35a9f14ea5b012e552cd6b3a7e7452", 698833, 404),
 
@@ -5212,6 +5231,33 @@ static const DirectorGameDescription gameDescriptions[] = {
 	MACGAME1("netmaze", "v1.1", "Netmaze 1.1", "r:ea646eccc9a53f44ce082459d4809a06", 483518, 404),
 
 	WINDEMO1("newslinks", "Demo", "NEWS.EXE", "22900fa6922d71b1f880aa3cc0bbad1a", 16526563, 404),
+
+	// Desktop goodies and minigames found on "Neon Genesis Evangelion: Collector's Discs" 1-5
+	// Clock modeled after the clock/timer shown in the anime
+	MACGAME1_l("ngeclock", "", "EVACLOCK.X",   "rt:f8fa4695e9ea5df8243b3860cd51be26", 483159, Common::JA_JPN, 404),
+	WINGAME1_l("ngeclock", "", "EVACLOCK.EXE", "t:4080da0931557972e1ace5ed836cf8be",  791403, Common::JA_JPN, 404),
+	// Pen-Pen penguin desktop buddy following the mouse pointer
+	MACGAME1_l("ngepenpenmouse", "", "PENPEN.X",   "rt:f887111b3503187d10ec0ffb66ac70d9", 484067, Common::JA_JPN, 404),
+	WINGAME1_l("ngepenpenmouse", "", "PENPEN.EXE", "t:906372053c8810bcb86e77c6fc7eeebc", 728659, Common::JA_JPN, 404),
+	// Rei's red eye following the mouse pointer
+	MACGAME1_l("ngereieyemouse", "", "REI  EYE",   "rt:e4b7a37544b4074fe828b89dbe237b2d", 483159, Common::JA_JPN, 404),
+	WINGAME1_l("ngereieyemouse", "", "REIEYE.EXE", "t:76f06d03a9e0eca2dcf9e9be3fc2f447", 1218603, Common::JA_JPN, 404),
+	// Turn-based strategy minigame
+	MACGAME2_l("ngeangels", "", "ANGELS",	  "r:10ffbdbb965ecaf8544f6247eeb149f8",  501777,
+								"R00.AIF",	  "d:3a09d81342770dcc880e398c6095356c",  165568, Common::JA_JPN, 404),
+	WINGAME2_l("ngeangels", "", "ANGELS.EXE", "t:4c48aca1ed98fe23a507d2dd1c34b05b", 2531133,
+								"R00.AIF",	  "f:3a09d81342770dcc880e398c6095356c",  165568, Common::JA_JPN, 404),
+	// Shooting minigame
+	MACGAME2_l("ngegenesis", "", "GENESIS",		"r:0de964648f76b9f1a3692b2771d0a0d8",	501777,
+								 "S00.AIF",		"d:869f0b3cac74d2932cce6d8fe31cc45f",	 60608, Common::JA_JPN, 404),
+	WINGAME2_l("ngegenesis", "", "GENESIS.EXE", "t:cdc83f4d519f3b162a1fe36f374bca86", 11196113,
+								 "S00.AIF",		"f:869f0b3cac74d2932cce6d8fe31cc45f",	 60608, Common::JA_JPN, 404),
+	// Action figures catalogue
+	MACGAME1_l("ngegk1", "", "4GK_CAT1.X",   "rt:c52e61d5a4cc5f0f17279e21a2be02b9",  502747, Common::JA_JPN, 404),
+	WINGAME1_l("ngegk1", "", "4GK_CAT1.EXE", "t:287d17f2990b10157293af5cbe9066ec", 12321199, Common::JA_JPN, 404),
+	// AIFF audio player
+	// Mac version is not Director
+	WINGAME1_l("ngeaiff", "", "AIFPLAY.EXE", "t:2536de6b127308828768d461587495ce", 694305, Common::JA_JPN, 404),
 
 	// Published by GTE Interactive
 	MACGAME1("nightlight", "",	   "Night Light",  "r:0c7bbb4b24823e5ab871cb4c1d6f3710", 484028, 404),
@@ -6656,6 +6702,12 @@ static const DirectorGameDescription gameDescriptions[] = {
 						  "FILES/BLOCKS.DIR",	  "d:74388b29ce10d83bbad48c664d87eab3", 7363670, 500),
 	MACDEMO1("fplit", "Demo", "Toyland Preview", "9fbd2e99a6a23933083ba0934e4a7d01", 705417, 500),
 
+	WINGAME1("fpgapirates", "1996", "PIR32BIT/START32.EXE", "t:564db7e9ffacb6c0fecbf83c1f988069", 1394437, 500),
+	// Same EXE, different location
+	WINGAME2("fpgapirates", "1999", "INSTALL/EXE/START32.EXE", "t:564db7e9ffacb6c0fecbf83c1f988069", 1394437,
+									"PIRFILES/open.Dir", "t:0c0b3490b9fba141bf0fad8a735f145a", 1142930, 500),
+	MACGAME1("fpgapirates", "1999", "Fisher-Price Pirate Ship", "r:9fbd2e99a6a23933083ba0934e4a7d01", 705417, 500),
+
 	WINDEMO1t("fpready", "Demo", "FPRFS32.EXE", "b976d39fa7f7cf18a05149b5593f43e0", 2901579, 501),
 
 	// ©1996 Davidson & Associates, Inc.
@@ -6674,6 +6726,9 @@ static const DirectorGameDescription gameDescriptions[] = {
 
 	MACDEMO1("franklm", "Demo", "xn--Franklin Learns Math Info.-", "f637b7b88b82c0772082f84a0b2cf628", 705417, 500),
 	WINDEMO1("franklm", "Demo", "FLMINFO.EXE", "2e62abdad839e42068afdcd0644d7dcf", 1119725, 500),
+
+	// Released by Remus
+	WINGAME1_l("funquiz", "", "PRG/FUNQUIZ.EXE", "t:fcb30a24c59a89bb006ccb12070c323f", 2184545, Common::DE_DEU, 501),
 
 	// Other versions are D3
 	PIPGAME1("gadget", "", "GADGET", "d7e907d3933869f055ae59774c87f501", 111000, 501),
@@ -6857,8 +6912,9 @@ static const DirectorGameDescription gameDescriptions[] = {
 									 "LU_main.Dxr", "b3a548cd57f5129afac208e24463fa1d", 13234768, 501),
 
 	// Reissue is D10
-	WINGAME2_l("loewe1", "", "STARTW95.exe",	"t:3729a35f770f3362b0d992c329b9ddf6", 1410427,
-							 "MEDIA/SALPO.DXR", "f:b2b26111f46bbc688da324768c80dc82",  632954, Common::DE_DEU, 501),
+	MACGAME1_l("loewe1", "", "PowerMac/Start PowerMac_16bit", "rt:fba492a97c27e800b7101aae4f3d0bce", 107835, Common::DE_DEU, 501),
+	WINGAME2_l("loewe1", "", "STARTW95.exe",				  "t:3729a35f770f3362b0d992c329b9ddf6", 1410427,
+							 "MEDIA/SALPO.DXR",				  "f:b2b26111f46bbc688da324768c80dc82",  632954, Common::DE_DEU, 501),
 
 	MACGAME1("lovedisk", "", "MAP/LOVEDISK", "b69f9cb79da512852ed383a1cfef14b9", 719005, 501),
 
@@ -8145,8 +8201,14 @@ static const DirectorGameDescription gameDescriptions[] = {
 
 	WINGAME1("letterrally", "1.0", "L_Rally.exe", "b0f3841f6e8005e519445b22de37749b", 3921651, 600),
 
+	MACGAME2_l("loewe2", "", "MEDIA/MACSTART",			"rt:282d2d4d2959fbf698b2cdf238c7d588", 1033198,
+							 "MEDIA/DATA/BAUWAGEN.DXR", "d:56702894e84d310c5b7548b689953fbd",  8361884, Common::DE_DEU, 602),
 	WINGAME2_l("loewe2", "", "MEDIA/WIN95.exe",			"t:f808f4b3d526367fa8a1e32bf463dd64",  1512856,
 							 "MEDIA/DATA/BAUWAGEN.DXR", "f:56702894e84d310c5b7548b689953fbd",  8361884, Common::DE_DEU, 602),
+
+	// Original Mac filename is Löwenzahn 3
+	MACGAME1_l("loewe3", "", "xn--Lwenzahn 3-ecb",					"rt:e03c6cc5f2cdeef199f75c02928edafe", 1032378, Common::DE_DEU, 602),
+	WINGAME1_l("loewe3", "", "DATA/LOEWE3/SETUP/WIN95/LOEWE95.exe",	"t:0772adacde0f8fa5a9767de25be13527",  1514451, Common::DE_DEU, 602),
 
 	MACDEMO1("macos85", "Demo", "Mac OS 8.5 Demo", "49cc011560110af5e19d0cd1ee22b821", 1032397, 650),
 
@@ -8204,6 +8266,47 @@ static const DirectorGameDescription gameDescriptions[] = {
 
 	MACGAME1_l("ngeeva00pf", "", "EVA-00", "fd87b233709108cc1fb001523ce772f5", 1034175, Common::JA_JPN, 601),
 	WINGAME1t_l("ngeeva00pf", "", "EVA-00.exe", "78a827f7380c27c19f0035843437cf9a", 1520172, Common::JA_JPN, 600),
+
+	// Desktop goodies and minigames found on "Neon Genesis Evangelion: Collector's Discs" 6-7
+	// Tile puzzles. V2 is on disc 7 and has different images
+	MACGAME2_l("ngepuzzle1", "V1", "Puzzle01",	   "r:6c9bdbfacbf68551d15fa70108c177e5",  1035232,
+								   "ZSCR0102.Cxt", "d:039bf3e24d342cb20b744e5f8316350c",    40470, Common::JA_JPN, 602),
+	WINGAME2_l("ngepuzzle1", "V1", "PUZZLE01.exe", "t:c1e14f854d26bcf3dea32cc263beb079",  1566683,
+								   "ZSCR0102.Cxt", "f:039bf3e24d342cb20b744e5f8316350c",	40470, Common::JA_JPN, 602),
+	MACGAME2_l("ngepuzzle2", "V1", "Puzzle02",	   "rt:c3253b73b2623978f3c240685145f162", 1035232,
+								   "ZSCR0102.Cxt", "d:039bf3e24d342cb20b744e5f8316350c",    40470, Common::JA_JPN, 602),
+	WINGAME2_l("ngepuzzle2", "V1", "PUZZLE02.exe", "t:c1e14f854d26bcf3dea32cc263beb079",  1560883,
+								   "ZSCR0102.Cxt", "f:039bf3e24d342cb20b744e5f8316350c",	40470, Common::JA_JPN, 602),
+	MACGAME2_l("ngepuzzle1", "V2", "Puzzle01",	   "r:d75c9a4cc2c921cbcfa2e976bce9abd0",  1035232,
+								   "ZSCR0102.Cxt", "d:039bf3e24d342cb20b744e5f8316350c",    40470, Common::JA_JPN, 602),
+	WINGAME2_l("ngepuzzle1", "V2", "PUZZLE01.exe", "t:c1e14f854d26bcf3dea32cc263beb079",  1758121,
+								   "ZSCR0102.Cxt", "f:039bf3e24d342cb20b744e5f8316350c",	40470, Common::JA_JPN, 602),
+	MACGAME2_l("ngepuzzle2", "V2", "Puzzle02",	   "rt:17bd7ce428cc9e387a4d553fc5fde206", 1035232,
+								   "ZSCR0102.Cxt", "d:039bf3e24d342cb20b744e5f8316350c",    40470, Common::JA_JPN, 602),
+	WINGAME2_l("ngepuzzle2", "V2", "PUZZLE02.exe", "t:c1e14f854d26bcf3dea32cc263beb079",  1752305,
+								   "ZSCR0102.Cxt", "f:039bf3e24d342cb20b744e5f8316350c",	40470, Common::JA_JPN, 602),
+	// Pong clone. The second file is added only to prevent clashes
+	MACGAME2_l("ngedummy", "", "DUMMY",		 "r:77928426340b2674d0c53e49d0afa2cd", 1035204,
+							   "E_BOMB",	 "r:9f2cd0fdab00d1bfe22c5ab1ae5182ca", 1035204, Common::JA_JPN, 602),
+	WINGAME2_l("ngedummy", "", "DUMMY.exe",	 "t:c1e14f854d26bcf3dea32cc263beb079",  1576327,
+							   "E_BOMB.exe", "t:87da9e67656b2d389dad7cdbf8887664",	1823462, Common::JA_JPN, 602),
+	// Minesweeper clone. The second file is added only to prevent clashes
+	MACGAME2_l("ngebomb", "",  "E_BOMB",	 "r:9f2cd0fdab00d1bfe22c5ab1ae5182ca", 1035204,
+							   "DUMMY",		 "r:77928426340b2674d0c53e49d0afa2cd", 1035204, Common::JA_JPN, 602),
+	WINGAME2_l("ngebomb", "",  "E_BOMB.exe", "t:87da9e67656b2d389dad7cdbf8887664", 1823462,
+							   "DUMMY.exe",  "t:c1e14f854d26bcf3dea32cc263beb079", 1576327, Common::JA_JPN, 602),
+	// Demo of Evangelion Geometric Figure CD-ROM series (not Director)
+	MACDEMO1_l("ngegf", "Demo", "EGF_DEMO",		"r:a9b27c332bf746ec5eed8f2a7c1b533c", 1032940, Common::JA_JPN, 602),
+	WINDEMO1_l("ngegf", "Demo", "EGF_DEMO.exe", "t:a5facda2e9fe314b9874305729ed4742", 4445536, Common::JA_JPN, 602),
+	// Searchable index of the pictures included on the discs
+	MACGAME2_l("ngebrowser6", "", "BROWSER",			 "rt:827353d9a0fe8a0e75a320f4fe3d1bb7", 1035232,
+								  "ENGINE/ZSCR0102.Cxt", "d:d441072601c2875db554d8b34fa674a6",	  71224, Common::JA_JPN, 602),
+	WINGAME2_l("ngebrowser6", "", "BROWSE32.EXE",		 "t:8eacd473ed3df780afc16a0970691282",  1512498,
+								  "ENGINE/ZSCR0102.Cxt", "d:d441072601c2875db554d8b34fa674a6",	  71224, Common::JA_JPN, 602),
+	MACGAME2_l("ngebrowser7", "", "BROWSER",			 "rt:827353d9a0fe8a0e75a320f4fe3d1bb7", 1035296,
+								  "ENGINE/ZSCR0102.Cxt", "d:d0248fdf4d4726f7b2693dae9ad12004",	  71224, Common::JA_JPN, 602),
+	WINGAME2_l("ngebrowser7", "", "BROWSE32.EXE",		 "t:d6250fd82cb0d6eb7c0c3a02d61a289a",  1826827,
+								  "ENGINE/ZSCR0102.Cxt", "d:d0248fdf4d4726f7b2693dae9ad12004",	  71224, Common::JA_JPN, 602),
 
 	// Study guide from The Daily Telegraph
 	// Mac executable filename does indeed end in .exe
@@ -8837,6 +8940,10 @@ static const DirectorGameDescription gameDescriptions[] = {
 
 	WINGAME2("littlebilly", "", "quest.exe", "t:73ca03e8a10e3266f20442ce50fd0311", 105118,
 								"Child.dxr", "t:57e4acc11a12a483541cfb69eb570810", 387835, 700),
+
+	// Original Mac filename is Löwenzahn 4
+	MACGAME1_l("loewe4", "", "xn--Lwenzahn 4-ecb",		"rt:6f75666ef42bcd1d34bd120d011b42b1",  114029, Common::DE_DEU, 702),
+	WINGAME1_l("loewe4", "", "SETUP/WIN95/LOEWE4.exe",	"t:4766360be9f3067a9f314b3b3a454fa7",  1818036, Common::DE_DEU, 702),
 
 	MACGAME1("maisybday", "", "Maisy BDay",		"r:0944b962ebb00f4b5d5149d220f8449b", 113458,  702),
 	WINGAME1("maisybday", "", "Maisy BDay.exe", "t:26fc28194d1991645a9a42794bcb1b36", 2619122, 702),

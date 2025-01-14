@@ -130,6 +130,31 @@ void MacLoomGui::setupCursor(int &width, int &height, int &hotspotX, int &hotspo
 	resource.close();
 }
 
+void MacLoomGui::updateMenus() {
+	bool saveCondition, loadCondition;
+
+	// TODO: Complete LOOM with the rest of the proper code from disasm,
+	// for now we only have the copy protection code and a best guess in place...
+	//
+	// Details:
+	// VAR(221) & 0x4000:           Copy protection bit (the only thing I could confirm from the disasm)
+	// VAR(VAR_VERB_SCRIPT) == 5:   Best guess... it prevents saving/loading from e.g. difficulty selection screen
+	// _userPut > 0:                Best guess... it prevents saving/loading during cutscenes
+
+	saveCondition = loadCondition =
+		!(_vm->VAR(221) & 0x4000) &&
+		(_vm->VAR(_vm->VAR_VERB_SCRIPT) == 5) &&
+		(_vm->_userPut > 0);
+
+	Graphics::MacMenu *menu = _windowManager->getMenu();
+	Graphics::MacMenuItem *gameMenu = menu->getMenuItem(1);
+	Graphics::MacMenuItem *loadMenu = menu->getSubMenuItem(gameMenu, 0);
+	Graphics::MacMenuItem *saveMenu = menu->getSubMenuItem(gameMenu, 1);
+
+	loadMenu->enabled = _vm->canLoadGameStateCurrently() && loadCondition;
+	saveMenu->enabled = _vm->canSaveGameStateCurrently() && saveCondition;
+}
+
 bool MacLoomGui::handleMenu(int id, Common::String &name) {
 	if (MacGuiImpl::handleMenu(id, name))
 		return true;
@@ -137,16 +162,16 @@ bool MacLoomGui::handleMenu(int id, Common::String &name) {
 	switch (id) {
 	case 101:	// Drafts inventory
 		runDraftsInventory();
-		break;
+		return true;
 
 	case 204:	// Options
 		runOptionsDialog();
-		break;
+		return true;
 
 	case 205:	// Quit
 		if (runQuitDialog())
 			_vm->quitGame();
-		break;
+		return true;
 
 	default:
 		warning("Unknown menu command: %d", id);
@@ -303,7 +328,7 @@ void MacLoomGui::runAboutDialog() {
 			if (pattern > 4)
 				darkenOnly = false;
 
-			Graphics::drawRoundRect(r, 7, pattern, true, darkenOnly ? MacDialogWindow::plotPatternDarkenOnly : MacDialogWindow::plotPattern, window);
+			window->drawRoundRect(r, 7, pattern, true, darkenOnly ? MacDialogWindow::plotPatternDarkenOnly : MacDialogWindow::plotPattern);
 
 			if (!fastForward)
 				window->markRectAsDirty(r);
@@ -530,78 +555,85 @@ bool MacLoomGui::runOptionsDialog() {
 	if (!sound)
 		checkboxMusic->setEnabled(false);
 
-	MacPictureSlider *sliderTextSpeed = window->addPictureSlider(4, 5, true, 5, 105, 0, 9);
+	MacImageSlider *sliderTextSpeed = window->addImageSlider(4, 5, true, 5, 105, 0, 9);
 	sliderTextSpeed->setValue(textSpeed);
 
-	MacPictureSlider *sliderMusicQuality = window->addPictureSlider(8, 9, true, 5, 69, 0, 2, 6, 4);
+	MacImageSlider *sliderMusicQuality = window->addImageSlider(8, 9, true, 5, 69, 0, 2, 6, 4);
 	sliderMusicQuality->setValue(musicQualityOption);
 
 	// Machine rating
 	window->addSubstitution(Common::String::format("%d", _vm->VAR(53)));
 
-	// When quitting, the default action is not to not apply options
-	bool ret = false;
-	Common::Array<int> deferredActionsIds;
-
 	while (!_vm->shouldQuit()) {
-		int clicked = window->runDialog(deferredActionsIds);
+		MacDialogEvent event;
 
-		if (clicked == buttonOk->getId()) {
-			ret = true;
-			break;
+		while (window->runDialog(event)) {
+			switch (event.type) {
+			case kDialogClick:
+				if (event.widget == buttonOk) {
+					// TEXT SPEED
+					_vm->_defaultTextSpeed = CLIP<int>(sliderTextSpeed->getValue(), 0, 9);
+					ConfMan.setInt("original_gui_text_speed", _vm->_defaultTextSpeed);
+					_vm->setTalkSpeed(_vm->_defaultTextSpeed);
+
+					// SOUND&MUSIC ACTIVATION
+					// 0 - Sound&Music on
+					// 1 - Sound on, music off
+					// 2 - Sound&Music off
+					int musicVariableValue = 0;
+
+					if (checkboxSound->getValue() == 0)
+						musicVariableValue = 2;
+					else if (checkboxSound->getValue() == 1 && checkboxMusic->getValue() == 0)
+						musicVariableValue = 1;
+
+					_vm->_musicEngine->toggleMusic(musicVariableValue == 0);
+					_vm->_musicEngine->toggleSoundEffects(musicVariableValue < 2);
+					ConfMan.setBool("music_mute", musicVariableValue > 0);
+					ConfMan.setBool("mute", musicVariableValue == 2);
+
+					// SCROLLING ACTIVATION
+					_vm->_snapScroll = checkboxScrolling->getValue() == 0;
+
+					if (_vm->VAR_CAMERA_FAST_X != 0xFF)
+						_vm->VAR(_vm->VAR_CAMERA_FAST_X) = _vm->_snapScroll;
+
+					// FULL ANIMATION ACTIVATION
+					_vm->VAR(_vm->VAR_MACHINE_SPEED) = checkboxFullAnimation->getValue() == 1 ? 0 : 1;
+
+					// MUSIC QUALITY SELECTOR
+					musicQuality = musicQuality * 3 + 1 + sliderMusicQuality->getValue();
+					_vm->_musicEngine->setQuality(musicQuality);
+					ConfMan.setInt("mac_snd_quality", musicQuality);
+
+					_vm->syncSoundSettings();
+					ConfMan.flushToDisk();
+
+					delete window;
+					return true;
+				} else if (event.widget == buttonCancel) {
+					delete window;
+					return false;
+				}
+
+				break;
+
+			case kDialogValueChange:
+				if (event.widget == checkboxSound) {
+					checkboxMusic->setEnabled(checkboxSound->getValue() != 0);
+				}
+				break;
+
+			default:
+				break;
+			}
 		}
 
-		if (clicked == buttonCancel->getId())
-			break;
-
-		if (clicked == checkboxSound->getId())
-			checkboxMusic->setEnabled(checkboxSound->getValue() != 0);
-	}
-
-	if (ret) {
-		// Update settings
-
-		// TEXT SPEED
-		_vm->_defaultTextSpeed = CLIP<int>(sliderTextSpeed->getValue(), 0, 9);
-		ConfMan.setInt("original_gui_text_speed", _vm->_defaultTextSpeed);
-		_vm->setTalkSpeed(_vm->_defaultTextSpeed);
-
-		// SOUND&MUSIC ACTIVATION
-		// 0 - Sound&Music on
-		// 1 - Sound on, music off
-		// 2 - Sound&Music off
-		int musicVariableValue = 0;
-
-		if (checkboxSound->getValue() == 0)
-			musicVariableValue = 2;
-		else if (checkboxSound->getValue() == 1 && checkboxMusic->getValue() == 0)
-			musicVariableValue = 1;
-
-		_vm->_musicEngine->toggleMusic(musicVariableValue == 0);
-		_vm->_musicEngine->toggleSoundEffects(musicVariableValue < 2);
-		ConfMan.setBool("music_mute", musicVariableValue > 0);
-		ConfMan.setBool("mute", musicVariableValue == 2);
-
-		// SCROLLING ACTIVATION
-		_vm->_snapScroll = checkboxScrolling->getValue() == 0;
-
-		if (_vm->VAR_CAMERA_FAST_X != 0xFF)
-			_vm->VAR(_vm->VAR_CAMERA_FAST_X) = _vm->_snapScroll;
-
-		// FULL ANIMATION ACTIVATION
-		_vm->VAR(_vm->VAR_MACHINE_SPEED) = checkboxFullAnimation->getValue() == 1 ? 0 : 1;
-
-		// MUSIC QUALITY SELECTOR
-		musicQuality = musicQuality * 3 + 1 + sliderMusicQuality->getValue();
-		_vm->_musicEngine->setQuality(musicQuality);
-		ConfMan.setInt("mac_snd_quality", musicQuality);
-
-		_vm->syncSoundSettings();
-		ConfMan.flushToDisk();
+		window->delayAndUpdate();
 	}
 
 	delete window;
-	return ret;
+	return false;
 }
 
 void MacLoomGui::resetAfterLoad() {

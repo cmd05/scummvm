@@ -28,6 +28,8 @@
 
 namespace Darkseed {
 
+struct I18NTextWithPosition;
+
 class Cutscene {
 	char _cutsceneId = 0;
 	uint16 _movieStep = 9999;
@@ -73,8 +75,10 @@ private:
 	bool waitTime(int16 duration) const;
 
 	void freeMorph();
+
+	void displayTitleText(const I18NTextWithPosition &text);
 };
 
-}; // End of namespace Darkseed
+} // namespace Darkseed
 
 #endif // DARKSEED_CUTSCENE_H

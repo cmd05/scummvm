@@ -79,6 +79,7 @@ void Animation::setupOtherNspAnimation(int nspAnimIdx, int animId) {
 	case 7: // stairs down
 		_nsp_sprite_scaling_y_position = 0xbe;
 		_scaleSequence = true;
+		_player->_walkTarget.x -= 60;
 		break;
 	case 8:
 		_player->_position.x = 249;
@@ -109,6 +110,7 @@ void Animation::setupOtherNspAnimation(int nspAnimIdx, int animId) {
 		_player->_position.y = 77;
 		break;
 	case 39:
+	case 47:
 		_scaleSequence = true;
 		_player->_frameIdx = g_engine->_room->_locationSprites.getAnimAt(nspAnimIdx)._frameNo[0];
 		break;
@@ -120,10 +122,6 @@ void Animation::setupOtherNspAnimation(int nspAnimIdx, int animId) {
 	case 44:
 	case 46:
 		g_engine->playSound(30, 5, -1);
-		break;
-	case 47:
-		_scaleSequence = true;
-		_player->_frameIdx = g_engine->_room->_locationSprites.getAnimAt(nspAnimIdx)._frameNo[0];
 		break;
 	case 53 :
 	case 54 :
@@ -811,7 +809,7 @@ void Animation::updateAnimation() {
 				_spriteAnimCountdownTimer[0] = 3;
 				_objectVar[1] = 2000;
 			} else {
-				g_engine->_console->addTextLine("The cops ignore your demands for attention.");
+				g_engine->_console->addI18NText(kI18N_TheCopsIgnoreYourDemandsText);
 			}
 		}
 		if (_frameAdvanced && _player->_frameIdx == 1) {
