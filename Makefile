@@ -29,6 +29,10 @@ LOAD_RULES_MK   := 1
 
 ifeq "$(HAVE_GCC)" "1"
 	CXXFLAGS:= -Wall $(CXXFLAGS)
+
+	# debugging symbols
+	CXXFLAGS+= -g -O0
+
 	# Turn off some annoying and not-so-useful warnings
 	CXXFLAGS+= -Wno-long-long -Wno-multichar -Wno-unknown-pragmas -Wno-reorder
 	# Enable even more warnings...
