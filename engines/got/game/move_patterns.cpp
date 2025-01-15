@@ -302,11 +302,7 @@ int check_move0(int x, int y, ACTOR *actr) {
 	x1 = x + 1;
 	y1 = y + 8;
 	
-	if (_G(thor)->dir > 1)
-		x2 = x + 12;
-	else
-		x2 = x + 12; // FIXME : This causes a duplicate branch warning in GCC. Need to check as in check_move0() it's 10
-	
+	x2 = x + 12;	
 	y2 = y + 15;
 
 	_G(thor_special_flag) = false;
@@ -1448,52 +1444,47 @@ int movement_nine(ACTOR *actr) {
 
 // Vert straight (random length) change
 int movement_ten(ACTOR *actr) {
-	int d = actr->last_dir;
+	int lastDir = actr->last_dir;
 	int x1 = actr->x;
 	int y1 = actr->y;
 
-	int f = 0;
+	bool setRandomDirFl = false;
 	if (actr->counter) {
 		if (actr->pass_value != 1)
 			actr->counter--;
-		switch (d) {
+		switch (lastDir) {
 		case 0:
-			y1 -= 2;
-			if (!check_move2(x1, y1, actr))
-				f = 1;
-			break;
-		case 1:
-			y1 += 2;
-			if (!check_move2(x1, y1, actr))
-				f = 1;
-			break;
 		case 2:
 			y1 -= 2;
 			if (!check_move2(x1, y1, actr))
-				f = 1;
+				setRandomDirFl = true;
 			break;
+		case 1:
 		case 3:
 			y1 += 2;
 			if (!check_move2(x1, y1, actr))
-				f = 1;
+				setRandomDirFl = true;
+			break;
+
+		default:
 			break;
 		}
 	} else
-		f = 1;
+		setRandomDirFl = true;
 
-	if (f == 1) {
+	if (setRandomDirFl) {
 		actr->counter = g_events->getRandomNumber(10, 99);
-		d = g_events->getRandomNumber(1);
+		lastDir = g_events->getRandomNumber(1);
 	}
 
-	if (d > 1)
-		d -= 2;
+	if (lastDir > 1)
+		lastDir -= 2;
 
 	next_frame(actr);
-	actr->last_dir = d;
+	actr->last_dir = lastDir;
 	if (actr->directions == 1)
 		return 0;
-	return d;
+	return lastDir;
 }
 
 // Horz only (bats)
@@ -2104,12 +2095,9 @@ int movement_twentyseven(ACTOR *actr) {
 void set_thor_vars() {
 	_G(thor_x1) = _G(thor)->x + 1;
 	_G(thor_y1) = _G(thor)->y + 8;
-	_G(thor_real_y1) = _G(thor)->y;
-	if (_G(thor)->dir > 1)
-		_G(thor_x2) = (_G(thor)->x + 12);
-	else
-		_G(thor_x2) = (_G(thor)->x + 12); // CHECKME : in check_move0() it's 10
 
+	_G(thor_real_y1) = _G(thor)->y;
+	_G(thor_x2) = (_G(thor)->x + 12);
 	_G(thor_y2) = _G(thor)->y + 15;
 }
 
@@ -2482,11 +2470,9 @@ int movement_forty(ACTOR *actr) {
 		thor_damaged(actr);
 	}
 	int a = 5 + (actr->pass_value * 4);
-	int x1 = actr->x;
-	int x2 = _G(actor[a + 1]).x;
+	const int x1 = actr->x;
 	int d = actr->last_dir;
 
-	int f = 1;
 	if (actr->last_dir == 2) {
 		if (bgtile(x1 - 2, actr->y) >= TILE_SOLID) {
 			_G(actor[a].x) -= 2;
@@ -2494,24 +2480,14 @@ int movement_forty(ACTOR *actr) {
 			_G(actor[a - 2]).x -= 2;
 			_G(actor[a + 1]).x -= 2;
 		} else
-			f = 0;
-		if (!f)
 			d = 3;
-	} else {
-		if (bgtile(_G(actor[a + 1]).x + 14, _G(actor[a + 1]).y) >= TILE_SOLID) {
-			_G(actor[a]).x += 2;
-			_G(actor[a - 1]).x += 2;
-			_G(actor[a - 2]).x += 2;
-			_G(actor[a + 1]).x += 2;
-		} else
-			f = 0;
-		if (!f)
-			d = 2;
-	}
-	if (!f) {
-		actr->x = x1;
-		_G(actor[a + 1]).x = x2;
-	}
+	} else if (bgtile(_G(actor[a + 1]).x + 14, _G(actor[a + 1]).y) >= TILE_SOLID) {
+		_G(actor[a]).x += 2;
+		_G(actor[a - 1]).x += 2;
+		_G(actor[a - 2]).x += 2;
+		_G(actor[a + 1]).x += 2;
+	} else
+		d = 2;
 
 	if (actr->next == 3 && !actr->num_shots && actr->frame_count == actr->frame_speed) {
 		actor_always_shoots(actr, 1);
